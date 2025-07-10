@@ -1,7 +1,8 @@
 const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
-const userRoutes = require('./routes/user.routes'); // 👈 importa tus rutas
+const userRoutes = require('./routes/user.routes'); // importa tus rutas
+const { swaggerUi, swaggerSpec } = require('./config/swagger');
 
 const app = express();
 
@@ -9,10 +10,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Swagger route
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 // Ruta base para probar si el servidor responde
 app.get('/', (req, res) => {
   res.send('API is running...');
 });
+
 
 // Rutas de usuarios
 app.use('/api/users', userRoutes); // 👈 aquí agregas el router
